@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Sync - Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF9933;
+            --secondary: #FF7722;
+            --accent: #800080;
+            --text-light: #FFF;
+            --text-dark: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sanskrit Text', 'Segoe UI', serif;
+        }
+
+        body {
+            background: #000 url('/api/placeholder/2000/1000') center/cover fixed;
+            color: var(--text-light);
+            line-height: 1.6;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 1rem;
+            position: relative;
+        }
+
+        /* Floating particles animation */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+        }
+
+        .login-box {
+            background: rgba(128, 0, 128, 0.2);
+            border-radius: 15px;
+            border: 2px solid #FF9933;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+            position: relative;
+        }
+
+        .login-box:hover {
+            transform: translateZ(20px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #FF9933;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 153, 51, 0.5);
+        }
+
+        .header::after {
+            content: '🕉️';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 2rem;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-group label {
+            display: block;
+            color: #FF9933;
+            margin-bottom: 0.5rem;
+            transform: translateY(0);
+            transition: all 0.3s;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 153, 51, 0.3);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #FF9933;
+            box-shadow: 0 0 20px rgba(255, 153, 51, 0.2);
+        }
+
+        .form-group input:focus + label {
+            transform: translateY(-25px);
+            font-size: 0.8em;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #FF9933;
+            z-index: 1;
+        }
+
+        button {
+            background: linear-gradient(45deg, #FF9933, #FF7722);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .toggle-form {
+            text-align: center;
+            color: #FF9933;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toggle-form::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #FF9933;
+            transition: width 0.3s;
+        }
+
+        .toggle-form:hover::after {
+            width: 100%;
+        }
+
+        .social-login {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 153, 51, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 153, 51, 0.4);
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mobile-first responsive design */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 0.5rem;
+            }
+
+            .login-box {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-group input {
+                padding: 0.8rem;
+            }
+        }
+
+        /* Tablet styles */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .login-container {
+                max-width: 500px;
+            }
+        }
+
+        /* Desktop styles */
+        @media (min-width: 769px) {
+            .login-container {
+                max-width: 400px;
+            }
+
+            .login-box {
+                padding: 2.5rem;
+            }
+        }
+
+        /* Landscape orientation */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .login-container {
+                padding: 1rem 2rem;
+            }
+
+            .header {
+                margin-bottom: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles">
+        <!-- Particles will be added by JavaScript -->
+    </div>
+    
+    <div class="login-container">
+        <div class="login-box animate__animated animate__fadeIn">
+            <div class="header">
+                <h1>॥ Soul Sync ॥</h1>
+                <p>Ancient Wisdom Access</p>
+            </div>
+            <form id="loginForm">
+                <div id="errorMsg" class="error-message"></div>
+                <div id="successMsg" class="success-message"></div>
+                
+                <div class="form-group">
+                    <input type="email" id="email" required autocomplete="email">
+                    <label for="email">Email</label>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" id="password" required>
+                    <label for="password">Password</label>
+                    <span class="password-toggle" onclick="togglePassword('password')">👁️</span>
+                </div>
+                
+                <div id="confirmPasswordGroup" class="form-group" style="display: none;">
+                    <input type="password" id="confirmPassword">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <span class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</span>
+                </div>
+                
+                <button type="submit" id="submitBtn">
+                    <span class="button-text">Login</span>
+                    <div class="loading-spinner"></div>
+                </button>
+                
+                <div class="toggle-form" id="toggleForm">
+                    Don't have an account? Sign up
+                </div>
+                
+                <div class="social-login">
+                    <p>Or continue with</p>
+                    <div class="social-icons">
+                        <div class="social-icon">G</div>
+                        <div class="social-icon">f</div>
+                        <div class="social-icon">in</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        let isLoginMode = true;
+
+        document.getElementById('toggleForm').addEventListener('click', function() {
+            isLoginMode = !isLoginMode;
+            const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+            const submitBtn = document.getElementById('submitBtn').querySelector('.button-text');
+            const toggleText = document.getElementById('toggleForm');
+            const headerText = document.querySelector('.header p');
+            const loginBox = document.querySelector('.login-box');
+
+            loginBox.classList.add('animate__animated', 'animate__flipInX');
+            setTimeout(() => loginBox.classList.remove('animate__animated', 'animate__flipInX'), 1000);
+
+            if (isLoginMode) {
+                confirmPasswordGroup.style.display = 'none';
+                submitBtn.textContent = 'Login';
+                toggleText.textContent = "Don't have an account? Sign up";
+                headerText.textContent = 'Ancient Wisdom Access';
+            } else {
+                confirmPasswordGroup.style.display = 'block';
+                submitBtn.textContent = 'Sign Up';
+                toggleText.textContent = 'Already have an account? Login';
+                headerText.textContent = 'Join the Ancient Wisdom';
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const submitBtn = document.getElementById('submitBtn');
+            const buttonText = submitBtn.querySelector('.button-text');
+            const spinner = submitBtn.querySelector('.loading-spinner');
+
+            // Reset messages
+            errorMsg.textContent = '';
+            successMsg.textContent = '';
+
+            if (!isLoginMode && password !== confirmPassword) {
+                errorMsg.textContent = 'Passwords do not match';
+                return;
+            }
+
+            // Show loading state
+            buttonText.style.display = 'none';
+            spinner.style.display = 'block';
+
+            // Simulate API call
+            setTimeout(() => {
+                successMsg.textContent = isLoginMode ? 'Login successful!' : 'Account created successfully!';
+                
+                // Hide loading state
+                buttonText.style.display = 'block';
+                spinner.style.display = 'none';
+
+                // Redirect to main page after successful login/signup
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1000);
+            }, 1500);
+        });
+
+        // Initialize particles on load
+        createParticles();
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kundali Generator</title>
+    <style>
+        :root {
+            --primary-1: #2C1752;
+            --secondary-1: #4A2C82;
+            --primary-2: #FF9933;
+            --secondary-2: #FF7722;
+            --accent: #800080;
+            --text-light: #FFF;
+            --text-dark: #333;
+            --gradient: linear-gradient(135deg, var(--primary-1), var(--secondary-1));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--gradient);
+            min-height: 100vh;
+            color: var(--text-light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: var(--primary-2);
+            margin-bottom: 1rem;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--secondary-2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+
+        button {
+            background: var(--secondary-2);
+            color: var(--text-light);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background: var(--primary-2);
+            transform: translateY(-2px);
+        }
+
+        .kundali-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .kundali-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 2rem 0;
+        }
+
+        .house {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid var(--secondary-2);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            min-height: 100px;
+        }
+
+        .download-btn {
+            background: var(--accent);
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .kundali-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .results-text {
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .loading::after {
+            content: "⭐";
+            animation: rotate 1s infinite;
+            display: inline-block;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Kundali Generator ✨</h1>
+            <p>Discover your astrological chart based on your birth details</p>
+        </div>
+
+        <div class="form-container">
+            <form id="kundaliForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Time of Birth</label>
+                    <input type="time" id="time" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="place">Place of Birth</label>
+                    <input type="text" id="place" required>
+                </div>
+
+                <button type="submit">Generate Kundali</button>
+            </form>
+        </div>
+
+        <div class="loading">Calculating your Kundali...</div>
+
+        <div class="kundali-container" id="kundaliResult">
+            <h2>Your Kundali Chart</h2>
+            <div class="kundali-grid">
+                <!-- 12 houses of the Kundali -->
+                <div class="house" id="house1">House 1<br>Ascendant</div>
+                <div class="house" id="house2">House 2<br>Wealth</div>
+                <div class="house" id="house3">House 3<br>Communication</div>
+                <div class="house" id="house4">House 4<br>Home</div>
+                <div class="house" id="house5">House 5<br>Creativity</div>
+                <div class="house" id="house6">House 6<br>Health</div>
+                <div class="house" id="house7">House 7<br>Partnership</div>
+                <div class="house" id="house8">House 8<br>Transformation</div>
+                <div class="house" id="house9">House 9<br>Fortune</div>
+                <div class="house" id="house10">House 10<br>Career</div>
+                <div class="house" id="house11">House 11<br>Aspirations</div>
+                <div class="house" id="house12">House 12<br>Spirituality</div>
+            </div>
+            <div class="results-text"></div>
+            <button class="download-btn" onclick="downloadKundali()">Download Kundali</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('kundaliForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading animation
+            document.querySelector('.loading').style.display = 'block';
+            
+            // Simulate processing time
+            setTimeout(() => {
+                generateKundali();
+                document.querySelector('.loading').style.display = 'none';
+            }, 2000);
+        });
+
+        function generateKundali() {
+            const name = document.getElementById('name').value;
+            const dob = new Date(document.getElementById('dob').value);
+            const time = document.getElementById('time').value;
+            const place = document.getElementById('place').value;
+
+            // Show the Kundali container
+            document.getElementById('kundaliResult').style.display = 'block';
+
+            // Generate a simple interpretation
+            const resultsText = document.querySelector('.results-text');
+            resultsText.innerHTML = `
+                <h3>Kundali Analysis for ${name}</h3>
+                <p>Birth Details: ${dob.toDateString()} at ${time}, ${place}</p>
+                <p>Note: This is a demonstration of the Kundali layout. For accurate astrological calculations, 
+                please consult a professional astrologer who can provide detailed interpretations based on 
+                precise astronomical calculations.</p>
+            `;
+
+            // Populate houses with random zodiac signs (for demonstration)
+            const zodiacSigns = [
+                "Aries ♈", "Taurus ♉", "Gemini ♊", "Cancer ♋",
+                "Leo ♌", "Virgo ♍", "Libra ♎", "Scorpio ♏",
+                "Sagittarius ♐", "Capricorn ♑", "Aquarius ♒", "Pisces ♓"
+            ];
+
+            document.querySelectorAll('.house').forEach((house, index) => {
+                const randomSign = zodiacSigns[Math.floor(Math.random() * zodiacSigns.length)];
+                house.innerHTML += `<br>${randomSign}`;
+            });
+        }
+
+        function downloadKundali() {
+            const kundaliContent = document.getElementById('kundaliResult').innerHTML;
+            const blob = new Blob([kundaliContent], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-kundali.html';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
